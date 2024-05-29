@@ -16,20 +16,6 @@
 
 > Note: I don't take this repo seriously. This is mainly a resource I can link people to when teaching.
 
-## Examples
-
-- Fade In Fade Out
-- Sliding Puzzle Game
-- Borderless Window (Movable + Resizable + Minimizable + Maximizable)
-- 2D Circle Collision Detection Example
-- Custom Buttons
-    - Circle Buttons
-    - Custom Bordered Buttons
-- Navigation Bar
-- Transparent Screen Selector
-- Animated Control Resize Helper Method
-- Animated Logo On Launch (gif image)
-
 ## Getting Started
 
 1. Install [Visual Studio](https://visualstudio.microsoft.com/) if not already installed, and be sure to include the dependencies for .NET and desktop development.
