@@ -48,7 +48,7 @@ namespace dotnet_winforms_examples
             // navigationBarExampleButton
             // 
             navigationBarExampleButton.Location = new System.Drawing.Point(291, 588);
-            navigationBarExampleButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            navigationBarExampleButton.Margin = new System.Windows.Forms.Padding(6);
             navigationBarExampleButton.Name = "navigationBarExampleButton";
             navigationBarExampleButton.Size = new System.Drawing.Size(435, 84);
             navigationBarExampleButton.TabIndex = 6;
@@ -75,9 +75,9 @@ namespace dotnet_winforms_examples
             Controls.Add(label2);
             Controls.Add(navigationBarExampleButton);
             Controls.Add(label1);
-            Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            Margin = new System.Windows.Forms.Padding(6);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Welcome form";
             ResumeLayout(false);
             PerformLayout();
         }
