@@ -1,0 +1,5 @@
+<configuration>
+	<connectionStrings>
+		<add name="DefaultConnection" connectionString="Server=TODO;Port=TODO;Database=TODO;User Id=TODO;Password=TODO" providerName="Npgsql" />
+	</connectionStrings>
+</configuration>
