@@ -15,6 +15,8 @@ namespace dotnet_winforms_examples
 {
     public partial class Main : Form
     {
+        private NpgsqlConnection connection;
+
         public Main()
         {
             InitializeComponent();
@@ -23,17 +25,17 @@ namespace dotnet_winforms_examples
 
         private void Main_Load(object sender, EventArgs e)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            NpgsqlConnection connection = new NpgsqlConnection(connectionString);
+            connection = DatabaseManager.Instance.GetConnection();
             connection.Open();
             NpgsqlCommand command = new NpgsqlCommand();
             command.Connection = connection;
             command.CommandType = CommandType.Text;
-            command.CommandText = "SELECT first_name, last_name, phone_number, contracts.contract_number, faculty FROM students " +
-                                    "LEFT JOIN contracts ON contracts.student_id = students.id;";
+            command.CommandText = "SELECT first_name, last_name, phone_number, COALESCE(contracts.contract_number, 'без контракту'), COALESCE(faculty, '') FROM students " +
+                                  "LEFT JOIN contracts ON contracts.student_id = students.id;";
             NpgsqlDataReader reader = command.ExecuteReader();
 
             listView1.View = View.Details;
+            listView1.MultiSelect = true;
             ColumnHeader columnHeaderFirstName = new ColumnHeader();
             columnHeaderFirstName.Text = "Імʼя";
             columnHeaderFirstName.Width = 160;
@@ -43,7 +45,6 @@ namespace dotnet_winforms_examples
             columnHeaderLastName.Text = "Прізвище";
             columnHeaderLastName.Width = 200;
             listView1.Columns.Add(columnHeaderLastName);
-
 
             ColumnHeader columnHeaderPhoneNumber = new ColumnHeader();
             columnHeaderPhoneNumber.Text = "Номер телефона";
@@ -60,8 +61,6 @@ namespace dotnet_winforms_examples
             columnHeaderFaculty.Width = 250;
             listView1.Columns.Add(columnHeaderFaculty);
 
-
-
             while (reader.Read())
             {
                 listView1.Items.Add(new ListViewItem(new[] { reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4) }));
@@ -71,7 +70,6 @@ namespace dotnet_winforms_examples
             {
                 DataTable dt = new DataTable();
                 dt.Load(reader);
-                //dataGridView1.DataSource = dt;
             }
             command.Dispose();
             connection.Close();
