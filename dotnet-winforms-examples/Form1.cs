@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data;
 using System.Windows.Forms;
+using Npgsql;
 
 namespace dotnet_winforms_examples
 {
@@ -8,15 +10,14 @@ namespace dotnet_winforms_examples
         public Form1()
         {
             InitializeComponent();
+            
         }
 
         private void NavigationBarExampleButton_Click(object sender, EventArgs e)
         {
-            Form form = new() { Width = Width, Height = Height };
-            NavigationBarExampleUserControl navigationBarExampleUserControl = new();
-            navigationBarExampleUserControl.Dock = DockStyle.Fill;
-            form.Controls.Add(navigationBarExampleUserControl);
-            form.Show();
+            Main main = new Main();
+            main.Show();
+            this.Hide();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -25,6 +26,11 @@ namespace dotnet_winforms_examples
         }
 
         private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
