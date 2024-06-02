@@ -78,6 +78,7 @@ namespace dotnet_winforms_examples
             Margin = new System.Windows.Forms.Padding(6);
             Name = "Form1";
             Text = "Welcome form";
+            Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
         }
