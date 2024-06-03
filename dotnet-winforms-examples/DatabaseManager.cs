@@ -12,7 +12,7 @@ namespace dotnet_winforms_examples
     {
         private static readonly Lazy<DatabaseManager> instance = new Lazy<DatabaseManager>(() => new DatabaseManager());
 
-        private NpgsqlConnection connection;
+        private NpgsqlConnection? connection;
 
         string connectionString;
 
@@ -20,7 +20,7 @@ namespace dotnet_winforms_examples
         {
             connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             // Initialize database connection
-            
+
             connection = new NpgsqlConnection(connectionString);
         }
 
