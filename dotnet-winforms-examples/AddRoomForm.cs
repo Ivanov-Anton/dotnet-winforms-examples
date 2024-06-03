@@ -13,7 +13,7 @@ namespace dotnet_winforms_examples
 {
     public partial class AddRoomForm : Form
     {
-        NpgsqlConnection connection;
+        private NpgsqlConnection? connection;
 
         public AddRoomForm()
         {
