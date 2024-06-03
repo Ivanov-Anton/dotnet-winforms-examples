@@ -68,15 +68,10 @@ namespace dotnet_winforms_examples
 
             // rooms
 
-            NpgsqlConnection connectionRoom = DatabaseManager.Instance.GetUniiqueConnection();
-            NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("SELECT floor, number, available_places, places, comfort, has_balcony, has_fridge, has_microwave, price FROM rooms;", connectionRoom);
-            DataTable dataTable = new DataTable();
-            dataAdapter.Fill(dataTable);
-            dataGridViewRooms.AutoGenerateColumns = false;
-            dataGridViewRooms.DataSource = dataTable;
-            dataGridViewRooms.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            LoadData();
 
             // Add columns
+            dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "id", DataPropertyName = "id", Width = 40 });
             dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Номер етажа", DataPropertyName = "floor", Width = 100 });
             dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Номер кімнати", DataPropertyName = "number", Width = 100 });
             dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Доступно місць", DataPropertyName = "available_places", Width = 100 });
@@ -89,20 +84,75 @@ namespace dotnet_winforms_examples
             // Add action button column
             var actionButtonColumn = new DataGridViewButtonColumn
             {
-                HeaderText = "Видалити",
+                HeaderText = "Управління",
                 Text = "Видалити",
                 UseColumnTextForButtonValue = true
             };
             dataGridViewRooms.Columns.Add(actionButtonColumn);
+           
+            dataGridViewRooms.CellClick += dataGridViewRooms_CellClick;
 
 
             command.Dispose();
             connection.Close();
         }
 
+        private void dataGridViewRooms_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 10)
+            {
+                var id = dataGridViewRooms.Rows[e.RowIndex].Cells[0].Value.ToString();
+
+                DeleteRowFromDatabase(id);
+            }
+            
+        }
+
+        private void DeleteRowFromDatabase(string id)
+        {
+            string query = "DELETE FROM rooms WHERE id = @Id"; // Adjust the table name and column name accordingly
+            NpgsqlConnection connToDelete = DatabaseManager.Instance.GetUniiqueConnection();
+
+            using (NpgsqlCommand command = new NpgsqlCommand(query, connToDelete))
+            {
+                command.Parameters.AddWithValue("@Id", int.Parse(id));
+                connToDelete.Open();
+                command.ExecuteNonQuery();
+                connToDelete.Close();
+            }
+
+            // Refresh the DataGridView to reflect the changes
+            RefreshDataGridView();
+        }
+
+        private void RefreshDataGridView()
+        {
+            // Clear and reload the DataGridView data
+            dataGridViewRooms.DataSource = null;
+            LoadData();
+        }
+
+        private void LoadData()
+        {
+            NpgsqlConnection connectionRoom = DatabaseManager.Instance.GetUniiqueConnection();
+            NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("SELECT id, floor, number, available_places, places, comfort, has_balcony, has_fridge, has_microwave, price FROM rooms;", connectionRoom);
+            DataTable dataTable = new DataTable();
+            dataAdapter.Fill(dataTable);
+            dataGridViewRooms.AutoGenerateColumns = false;
+            dataGridViewRooms.DataSource = dataTable;
+            dataGridViewRooms.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        }
+
         private void addStudentButton_Click(object sender, EventArgs e)
         {
             AddStudentForm form = new AddStudentForm();
+            form.Show();
+            this.Hide();
+        }
+
+        private void addNewRoomButton_Click(object sender, EventArgs e)
+        {
+            AddRoomForm form = new AddRoomForm();
             form.Show();
             this.Hide();
         }
