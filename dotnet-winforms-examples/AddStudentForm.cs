@@ -13,10 +13,24 @@ namespace dotnet_winforms_examples
 {
     public partial class AddStudentForm : Form
     {
-        private NpgsqlConnection connection;
+        private NpgsqlConnection? connection;
+
         public AddStudentForm()
         {
             InitializeComponent();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                const int CS_NOCLOSE = 0x200;
+                CreateParams createParams = base.CreateParams;
+                createParams.ClassStyle |= CS_NOCLOSE;
+                return createParams;
+            }
         }
 
         private void saveStudentButton_Click(object sender, EventArgs e)
@@ -40,6 +54,13 @@ namespace dotnet_winforms_examples
             int rowsAffected = command.ExecuteNonQuery();
             Console.WriteLine("Rows affected: " + rowsAffected);
             connection.Close();
+            this.Close();
+            Main main = new Main();
+            main.Show();
+        }
+
+        private void closeButton_Click(object sender, EventArgs e)
+        {
             this.Close();
             Main main = new Main();
             main.Show();

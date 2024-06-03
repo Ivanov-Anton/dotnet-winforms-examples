@@ -39,7 +39,7 @@
             label3 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
-            button2 = new System.Windows.Forms.Button();
+            closeButton = new System.Windows.Forms.Button();
             saveStudentButton = new System.Windows.Forms.Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -56,7 +56,7 @@
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
-            groupBox1.Controls.Add(button2);
+            groupBox1.Controls.Add(closeButton);
             groupBox1.Controls.Add(saveStudentButton);
             groupBox1.Location = new System.Drawing.Point(24, 25);
             groupBox1.Name = "groupBox1";
@@ -145,15 +145,16 @@
             label1.TabIndex = 2;
             label1.Text = "Імʼя";
             // 
-            // button2
+            // closeButton
             // 
-            button2.ForeColor = System.Drawing.Color.Red;
-            button2.Location = new System.Drawing.Point(536, 446);
-            button2.Name = "button2";
-            button2.Size = new System.Drawing.Size(138, 74);
-            button2.TabIndex = 1;
-            button2.Text = "Закрити";
-            button2.UseVisualStyleBackColor = true;
+            closeButton.ForeColor = System.Drawing.Color.Red;
+            closeButton.Location = new System.Drawing.Point(536, 446);
+            closeButton.Name = "closeButton";
+            closeButton.Size = new System.Drawing.Size(138, 74);
+            closeButton.TabIndex = 1;
+            closeButton.Text = "Закрити";
+            closeButton.UseVisualStyleBackColor = true;
+            closeButton.Click += closeButton_Click;
             // 
             // saveStudentButton
             // 
@@ -186,7 +187,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button saveStudentButton;
         private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.DateTimePicker dateTimePickerBirth;
