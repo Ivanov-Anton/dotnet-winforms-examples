@@ -14,9 +14,11 @@ namespace dotnet_winforms_examples
 
         private NpgsqlConnection connection;
 
+        string connectionString;
+
         private DatabaseManager()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             // Initialize database connection
             
             connection = new NpgsqlConnection(connectionString);
@@ -27,6 +29,11 @@ namespace dotnet_winforms_examples
         public NpgsqlConnection GetConnection()
         {
             return connection;
+        }
+
+        public NpgsqlConnection GetUniiqueConnection()
+        {
+            return new NpgsqlConnection(connectionString);
         }
     }
 }

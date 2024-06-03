@@ -34,9 +34,15 @@
             addStudentButton = new System.Windows.Forms.Button();
             listView1 = new System.Windows.Forms.ListView();
             tabPage2 = new System.Windows.Forms.TabPage();
+            groupBox2 = new System.Windows.Forms.GroupBox();
+            dataGridViewRooms = new System.Windows.Forms.DataGridView();
+            button1 = new System.Windows.Forms.Button();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox1.SuspendLayout();
+            tabPage2.SuspendLayout();
+            groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewRooms).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -99,6 +105,7 @@
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(groupBox2);
             tabPage2.Location = new System.Drawing.Point(74, 4);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -106,6 +113,37 @@
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Кімнати";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(dataGridViewRooms);
+            groupBox2.Controls.Add(button1);
+            groupBox2.Location = new System.Drawing.Point(24, 22);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new System.Drawing.Size(1780, 1026);
+            groupBox2.TabIndex = 0;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "groupBox2";
+            // 
+            // dataGridViewRooms
+            // 
+            dataGridViewRooms.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewRooms.Location = new System.Drawing.Point(19, 48);
+            dataGridViewRooms.Name = "dataGridViewRooms";
+            dataGridViewRooms.RowHeadersWidth = 82;
+            dataGridViewRooms.RowTemplate.Height = 41;
+            dataGridViewRooms.Size = new System.Drawing.Size(1439, 895);
+            dataGridViewRooms.TabIndex = 1;
+            // 
+            // button1
+            // 
+            button1.ForeColor = System.Drawing.Color.FromArgb(0, 192, 0);
+            button1.Location = new System.Drawing.Point(1503, 64);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(242, 45);
+            button1.TabIndex = 0;
+            button1.Text = "Додати кімнату";
+            button1.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
@@ -119,6 +157,9 @@
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
+            tabPage2.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridViewRooms).EndInit();
             ResumeLayout(false);
         }
 
@@ -130,5 +171,8 @@
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button addStudentButton;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.DataGridView dataGridViewRooms;
+        private System.Windows.Forms.Button button1;
     }
 }
