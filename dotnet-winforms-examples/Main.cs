@@ -66,11 +66,35 @@ namespace dotnet_winforms_examples
                 listView1.Items.Add(new ListViewItem(new[] { reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4) }));
             }
 
-            if (reader.HasRows)
+            // rooms
+            NpgsqlConnection connectionRoom = DatabaseManager.Instance.GetUniiqueConnection();
+            NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("SELECT floor, number, available_places, places, comfort, has_balcony, has_fridge, has_microwave, price FROM rooms;", connectionRoom);
+            DataTable dataTable = new DataTable();
+            dataAdapter.Fill(dataTable);
+            dataGridViewRooms.AutoGenerateColumns = false;
+            dataGridViewRooms.DataSource = dataTable;
+            dataGridViewRooms.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            // Add columns
+            dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Номер етажа", DataPropertyName = "floor", Width = 100 });
+            dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Номер кімнати", DataPropertyName = "number", Width = 100 });
+            dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Доступно місць", DataPropertyName = "available_places", Wifth: 100 });
+            dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Всього місць", DataPropertyName = "places" });
+            dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Комфорт", DataPropertyName = "comfort", Width = 120 });
+            dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Балкон", DataPropertyName = "has_balcony", Width = 120 });
+            dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Холодильник", DataPropertyName = "has_fridge", Width = 120 });
+            dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Мікрохвилоьва пічь", DataPropertyName = "has_microwave", Width = 120 });
+            dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Ціна", DataPropertyName = "price", Width = 120 });
+            // Add action button column
+            var actionButtonColumn = new DataGridViewButtonColumn
             {
-                DataTable dt = new DataTable();
-                dt.Load(reader);
-            }
+                HeaderText = "Видалити",
+                Text = "Видалити",
+                UseColumnTextForButtonValue = true
+            };
+            dataGridViewRooms.Columns.Add(actionButtonColumn);
+
+
             command.Dispose();
             connection.Close();
         }
