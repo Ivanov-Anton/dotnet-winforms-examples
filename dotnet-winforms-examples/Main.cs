@@ -15,7 +15,7 @@ namespace dotnet_winforms_examples
 {
     public partial class Main : Form
     {
-        private NpgsqlConnection connection;
+        private NpgsqlConnection? connection;
 
         public Main()
         {
