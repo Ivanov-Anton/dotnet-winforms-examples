@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Npgsql;
 
 namespace dotnet_winforms_examples
 {
@@ -21,9 +20,19 @@ namespace dotnet_winforms_examples
             InitializeComponent();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        protected override CreateParams CreateParams
         {
-            // todo to remove
+            get
+            {
+                const int CS_NOCLOSE = 0x200;
+                const int WS_MINIMIZEBOX = 0x20000;
+                const int WS_MAXIMIZEBOX = 0x10000;
+                CreateParams createParams = base.CreateParams;
+                createParams.ClassStyle |= CS_NOCLOSE;
+                createParams.ClassStyle |= WS_MINIMIZEBOX;
+                createParams.ClassStyle |= WS_MAXIMIZEBOX;
+                return createParams;
+            }
         }
 
         private void saveStudentButton_Click(object sender, EventArgs e)

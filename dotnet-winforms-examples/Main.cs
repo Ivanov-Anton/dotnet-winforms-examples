@@ -67,6 +67,7 @@ namespace dotnet_winforms_examples
             }
 
             // rooms
+
             NpgsqlConnection connectionRoom = DatabaseManager.Instance.GetUniiqueConnection();
             NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("SELECT floor, number, available_places, places, comfort, has_balcony, has_fridge, has_microwave, price FROM rooms;", connectionRoom);
             DataTable dataTable = new DataTable();
