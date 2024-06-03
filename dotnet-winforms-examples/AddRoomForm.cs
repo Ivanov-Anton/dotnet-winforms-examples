@@ -18,6 +18,8 @@ namespace dotnet_winforms_examples
         public AddRoomForm()
         {
             InitializeComponent();
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
         }
 
         protected override CreateParams CreateParams
@@ -25,12 +27,8 @@ namespace dotnet_winforms_examples
             get
             {
                 const int CS_NOCLOSE = 0x200;
-                const int WS_MINIMIZEBOX = 0x20000;
-                const int WS_MAXIMIZEBOX = 0x10000;
                 CreateParams createParams = base.CreateParams;
                 createParams.ClassStyle |= CS_NOCLOSE;
-                createParams.ClassStyle |= WS_MINIMIZEBOX;
-                createParams.ClassStyle |= WS_MAXIMIZEBOX;
                 return createParams;
             }
         }
@@ -43,16 +41,16 @@ namespace dotnet_winforms_examples
             command.Connection = connection;
             command.CommandType = CommandType.Text;
 
-            string capycityPlaces = textBoxPlaces.Text;
+            int capacityPlaces = int.Parse(textBoxPlaces.Text);
             string lavelComfort = textBoxLavelComfort.Text;
-            string floorNumber = textBoxNumberFloor.Text;
-            string hasBalcony = textBoxBalcony.Text;
-            string hasFridge = textBoxFridge.Text;
-            string hasMicrowave = textBoxMicrowawe.Text;
-            string numberOfRoom = textBoxNumberOfRoom.Text;
-            string price = textBoxPrice.Text;
+            int floorNumber = int.Parse(textBoxNumberFloor.Text);
+            bool hasBalcony = checkBoxBalcony.Checked;
+            bool hasFridge = checkBoxFridge.Checked;
+            bool hasMicrowave = checkBoxMicrowawe.Checked;
+            int numberOfRoom = int.Parse(textBoxNumberOfRoom.Text);
+            float price = float.Parse(textBoxPrice.Text);
 
-            command.Parameters.AddWithValue("@capycityPlaces", capycityPlaces);
+            command.Parameters.AddWithValue("@capacityPlaces", capacityPlaces);
             command.Parameters.AddWithValue("@lavelComfort", lavelComfort);
             command.Parameters.AddWithValue("@floorNumber", floorNumber);
             command.Parameters.AddWithValue("@hasBalcony", hasBalcony);
@@ -62,11 +60,18 @@ namespace dotnet_winforms_examples
             command.Parameters.AddWithValue("@price", price);
 
             command.CommandText = "INSERT INTO rooms(places, comfort, floor, has_balcony, has_fridge, has_microwave, number, price) " +
-                                  "VALUES (@capycityPlaces, @lavelComfort, @floorNumber, @hasBalcony, @hasFridge, @hasMicrowave, @numberOfRoom, @price)";
+                                  "VALUES (@capacityPlaces, @lavelComfort, @floorNumber, @hasBalcony, @hasFridge, @hasMicrowave, @numberOfRoom, @price)";
 
             int rowsAffected = command.ExecuteNonQuery();
             MessageBox.Show(rowsAffected.ToString());
             connection.Close();
+            this.Close();
+            Main main = new Main();
+            main.Show();
+        }
+
+        private void closeButton_Click(object sender, EventArgs e)
+        {
             this.Close();
             Main main = new Main();
             main.Show();

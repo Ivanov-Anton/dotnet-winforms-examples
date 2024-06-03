@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             groupBox1 = new System.Windows.Forms.GroupBox();
-            button1 = new System.Windows.Forms.Button();
+            checkBoxBalcony = new System.Windows.Forms.CheckBox();
+            checkBoxFridge = new System.Windows.Forms.CheckBox();
+            checkBoxMicrowawe = new System.Windows.Forms.CheckBox();
+            closeButton = new System.Windows.Forms.Button();
             saveStudentButton = new System.Windows.Forms.Button();
-            textBoxBalcony = new System.Windows.Forms.TextBox();
-            textBoxFridge = new System.Windows.Forms.TextBox();
-            textBoxMicrowawe = new System.Windows.Forms.TextBox();
             label1 = new System.Windows.Forms.Label();
             label7 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
@@ -52,11 +52,11 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(button1);
+            groupBox1.Controls.Add(checkBoxBalcony);
+            groupBox1.Controls.Add(checkBoxFridge);
+            groupBox1.Controls.Add(checkBoxMicrowawe);
+            groupBox1.Controls.Add(closeButton);
             groupBox1.Controls.Add(saveStudentButton);
-            groupBox1.Controls.Add(textBoxBalcony);
-            groupBox1.Controls.Add(textBoxFridge);
-            groupBox1.Controls.Add(textBoxMicrowawe);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(label7);
             groupBox1.Controls.Add(label6);
@@ -77,15 +77,43 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Додавання нової кімнати";
             // 
-            // button1
+            // checkBoxBalcony
             // 
-            button1.ForeColor = System.Drawing.Color.Red;
-            button1.Location = new System.Drawing.Point(492, 580);
-            button1.Name = "button1";
-            button1.Size = new System.Drawing.Size(182, 74);
-            button1.TabIndex = 18;
-            button1.Text = "Закрити";
-            button1.UseVisualStyleBackColor = true;
+            checkBoxBalcony.AutoSize = true;
+            checkBoxBalcony.Location = new System.Drawing.Point(275, 510);
+            checkBoxBalcony.Name = "checkBoxBalcony";
+            checkBoxBalcony.Size = new System.Drawing.Size(28, 27);
+            checkBoxBalcony.TabIndex = 21;
+            checkBoxBalcony.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxFridge
+            // 
+            checkBoxFridge.AutoSize = true;
+            checkBoxFridge.Location = new System.Drawing.Point(276, 456);
+            checkBoxFridge.Name = "checkBoxFridge";
+            checkBoxFridge.Size = new System.Drawing.Size(28, 27);
+            checkBoxFridge.TabIndex = 20;
+            checkBoxFridge.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxMicrowawe
+            // 
+            checkBoxMicrowawe.AutoSize = true;
+            checkBoxMicrowawe.Location = new System.Drawing.Point(277, 395);
+            checkBoxMicrowawe.Name = "checkBoxMicrowawe";
+            checkBoxMicrowawe.Size = new System.Drawing.Size(28, 27);
+            checkBoxMicrowawe.TabIndex = 19;
+            checkBoxMicrowawe.UseVisualStyleBackColor = true;
+            // 
+            // closeButton
+            // 
+            closeButton.ForeColor = System.Drawing.Color.Red;
+            closeButton.Location = new System.Drawing.Point(492, 580);
+            closeButton.Name = "closeButton";
+            closeButton.Size = new System.Drawing.Size(182, 74);
+            closeButton.TabIndex = 18;
+            closeButton.Text = "Закрити";
+            closeButton.UseVisualStyleBackColor = true;
+            closeButton.Click += closeButton_Click;
             // 
             // saveStudentButton
             // 
@@ -96,27 +124,6 @@
             saveStudentButton.Text = "Додати кімнату";
             saveStudentButton.UseVisualStyleBackColor = true;
             saveStudentButton.Click += saveStudentButton_Click;
-            // 
-            // textBoxBalcony
-            // 
-            textBoxBalcony.Location = new System.Drawing.Point(270, 505);
-            textBoxBalcony.Name = "textBoxBalcony";
-            textBoxBalcony.Size = new System.Drawing.Size(404, 39);
-            textBoxBalcony.TabIndex = 16;
-            // 
-            // textBoxFridge
-            // 
-            textBoxFridge.Location = new System.Drawing.Point(270, 447);
-            textBoxFridge.Name = "textBoxFridge";
-            textBoxFridge.Size = new System.Drawing.Size(404, 39);
-            textBoxFridge.TabIndex = 15;
-            // 
-            // textBoxMicrowawe
-            // 
-            textBoxMicrowawe.Location = new System.Drawing.Point(270, 388);
-            textBoxMicrowawe.Name = "textBoxMicrowawe";
-            textBoxMicrowawe.Size = new System.Drawing.Size(404, 39);
-            textBoxMicrowawe.TabIndex = 14;
             // 
             // label1
             // 
@@ -253,11 +260,11 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBoxBalcony;
-        private System.Windows.Forms.TextBox textBoxFridge;
-        private System.Windows.Forms.TextBox textBoxMicrowawe;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Button saveStudentButton;
+        private System.Windows.Forms.CheckBox checkBoxMicrowawe;
+        private System.Windows.Forms.CheckBox checkBoxBalcony;
+        private System.Windows.Forms.CheckBox checkBoxFridge;
     }
 }
