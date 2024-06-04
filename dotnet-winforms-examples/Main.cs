@@ -188,14 +188,15 @@ namespace dotnet_winforms_examples
         {
             NpgsqlConnection connectionPaidPayments = DatabaseManager.Instance.GetUniiqueConnection();
             string sql = "SELECT payments.id, " +
-                                                                          "TO_CHAR(month, 'mm-yyyy') AS month, " +
-                                                                          "status, " +
-                                                                          "CONCAT(students.last_name, ' ', students.first_name) AS student_full_name " +
-                                                                          "payments.monthly_amount AS monthly_amount " +
-                                                                          "FROM payments " +
-                                                                          "INNER JOIN contracts ON contracts.id = payments.contract_id " +
-                                                                          "INNER JOIN students ON students.id = contracts.student_id"
-            NpgsqlDataAdapter dataAdapterPayments = new NpgsqlDataAdapter(,
+                         "TO_CHAR(month, 'mm-yyyy') AS month, " +
+                         "status, " +
+                         "CONCAT(students.last_name, ' ', students.first_name) AS student_full_name, " +
+                         "payments.monthly_amount AS monthly_amount " +
+                         "FROM payments " +
+                         "INNER JOIN contracts ON contracts.id = payments.contract_id " +
+                         "INNER JOIN students ON students.id = contracts.student_id";
+
+            NpgsqlDataAdapter dataAdapterPayments = new NpgsqlDataAdapter(sql,
                                                                           connectionPaidPayments
                                                                          );
             DataTable dataTablePayments = new DataTable();
