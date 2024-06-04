@@ -20,7 +20,6 @@ namespace dotnet_winforms_examples
         public Main()
         {
             InitializeComponent();
-
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -68,7 +67,7 @@ namespace dotnet_winforms_examples
 
             // rooms
 
-            LoadData();
+            LoadRoomsData();
 
             // Add columns
             dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "id", DataPropertyName = "id", Width = 40 });
@@ -89,9 +88,29 @@ namespace dotnet_winforms_examples
                 UseColumnTextForButtonValue = true
             };
             dataGridViewRooms.Columns.Add(actionButtonColumn);
-           
+
             dataGridViewRooms.CellClick += dataGridViewRooms_CellClick;
 
+
+            // payments
+
+            LoadPaidPaymentsData();
+            dataGridViewPaidPayments.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "id", DataPropertyName = "id", Width = 40 });
+            dataGridViewPaidPayments.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "За який місяц платіж", DataPropertyName = "month", Width = 200 });
+            dataGridViewPaidPayments.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Статус", DataPropertyName = "status", Width = 150 });
+            dataGridViewPaidPayments.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Студент", DataPropertyName = "student_full_name", Width = 320 });
+            dataGridViewPaidPayments.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Сума", DataPropertyName = "monthly_amount", Width = 100 });
+            dataGridViewPaidPayments.CellFormatting += dataGridViewPaidPayments_CellFormatting;
+            // Add action button column
+            var actionMarkAsPaidButton = new DataGridViewButtonColumn
+            {
+                HeaderText = "Управління",
+                Text = "Помітити я сплачений",
+                UseColumnTextForButtonValue = true,
+                Width = 300
+            };
+            dataGridViewPaidPayments.Columns.Add(actionMarkAsPaidButton);
+            dataGridViewPaidPayments.CellClick += dataGridViewPaidPayments_CellClick;
 
             command.Dispose();
             connection.Close();
@@ -102,17 +121,16 @@ namespace dotnet_winforms_examples
             if (e.RowIndex >= 0 && e.ColumnIndex == 10)
             {
                 var id = dataGridViewRooms.Rows[e.RowIndex].Cells[0].Value.ToString();
-
                 DeleteRowFromDatabase(id);
             }
-            
+
         }
 
         private void DeleteRowFromDatabase(string id)
         {
             string query = "DELETE FROM rooms WHERE id = @Id"; // Adjust the table name and column name accordingly
             NpgsqlConnection connToDelete = DatabaseManager.Instance.GetUniiqueConnection();
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
             using (NpgsqlCommand command = new NpgsqlCommand(query, connToDelete))
             {
                 command.Parameters.AddWithValue("@Id", int.Parse(id));
@@ -129,10 +147,10 @@ namespace dotnet_winforms_examples
         {
             // Clear and reload the DataGridView data
             dataGridViewRooms.DataSource = null;
-            LoadData();
+            LoadRoomsData();
         }
 
-        private void LoadData()
+        private void LoadRoomsData()
         {
             NpgsqlConnection connectionRoom = DatabaseManager.Instance.GetUniiqueConnection();
             NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("SELECT id, floor, number, available_places, places, comfort, has_balcony, has_fridge, has_microwave, price FROM rooms;", connectionRoom);
@@ -141,6 +159,70 @@ namespace dotnet_winforms_examples
             dataGridViewRooms.AutoGenerateColumns = false;
             dataGridViewRooms.DataSource = dataTable;
             dataGridViewRooms.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        }
+
+        private void dataGridViewPaidPayments_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 3)
+            {
+                var id = dataGridViewPaidPayments.Rows[e.RowIndex].Cells[0].Value.ToString();
+                string query = "UPDATE payments SET status = 'Paid' WHERE id = @Id";
+                NpgsqlConnection connToUpdatePayment = DatabaseManager.Instance.GetUniiqueConnection();
+
+                using (NpgsqlCommand command = new NpgsqlCommand(query, connToUpdatePayment))
+                {
+                    command.Parameters.AddWithValue("@Id", int.Parse(id));
+                    connToUpdatePayment.Open();
+                    command.ExecuteNonQuery();
+                    connToUpdatePayment.Close();
+                }
+
+                // Refresh the DataGridView to reflect the changes
+                dataGridViewPaidPayments.DataSource = null;
+                LoadPaidPaymentsData();
+
+            }
+        }
+
+        private void LoadPaidPaymentsData()
+        {
+            NpgsqlConnection connectionPaidPayments = DatabaseManager.Instance.GetUniiqueConnection();
+            string sql = "SELECT payments.id, " +
+                         "TO_CHAR(month, 'mm-yyyy') AS month, " +
+                         "status, " +
+                         "CONCAT(students.last_name, ' ', students.first_name) AS student_full_name, " +
+                         "payments.monthly_amount AS monthly_amount " +
+                         "FROM payments " +
+                         "INNER JOIN contracts ON contracts.id = payments.contract_id " +
+                         "INNER JOIN students ON students.id = contracts.student_id";
+
+            NpgsqlDataAdapter dataAdapterPayments = new NpgsqlDataAdapter(sql,
+                                                                          connectionPaidPayments
+                                                                         );
+            DataTable dataTablePayments = new DataTable();
+            dataAdapterPayments.Fill(dataTablePayments);
+            dataGridViewPaidPayments.AutoGenerateColumns = false;
+            dataGridViewPaidPayments.DataSource = dataTablePayments;
+            dataGridViewPaidPayments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        }
+
+        private void dataGridViewPaidPayments_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridViewPaidPayments.Columns[e.ColumnIndex].DataPropertyName == "status" && e.Value != null)
+            {
+                string status = e.Value.ToString();
+                if (status == "Pending")
+                {
+                    e.Value = "Очікується";
+                    e.FormattingApplied = true;
+                }
+
+                if (status == "Paid")
+                {
+                    e.Value = "Cплачено";
+                    e.FormattingApplied = true;
+                }
+            }
         }
 
         private void addStudentButton_Click(object sender, EventArgs e)
@@ -155,6 +237,11 @@ namespace dotnet_winforms_examples
             AddRoomForm form = new AddRoomForm();
             form.Show();
             this.Hide();
+        }
+
+        private void updateButton_Click(object sender, EventArgs e)
+        {
+            LoadPaidPaymentsData();
         }
     }
 }

@@ -62,8 +62,7 @@ namespace dotnet_winforms_examples
             command.CommandText = "INSERT INTO rooms(places, comfort, floor, has_balcony, has_fridge, has_microwave, number, price) " +
                                   "VALUES (@capacityPlaces, @lavelComfort, @floorNumber, @hasBalcony, @hasFridge, @hasMicrowave, @numberOfRoom, @price)";
 
-            int rowsAffected = command.ExecuteNonQuery();
-            MessageBox.Show(rowsAffected.ToString());
+            command.ExecuteNonQuery();
             connection.Close();
             this.Close();
             Main main = new Main();
