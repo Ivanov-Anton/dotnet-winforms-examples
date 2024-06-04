@@ -36,6 +36,16 @@ namespace dotnet_winforms_examples
             }
         }
 
+        private string GenerateContractNumber()
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string letters = new string(Enumerable.Repeat(chars, 3)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+            string numbers = random.Next(100, 1000).ToString();
+            return $"{letters}-{numbers}";
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -85,8 +95,37 @@ namespace dotnet_winforms_examples
             if (comboBoxStudents.SelectedItem is ComboboxItem selectedItem)
             {
                 selectedStudentId = (int)selectedItem.Value;
-                MessageBox.Show("save");
             }
+        }
+
+        private void addStudentToRoomButton_Click(object sender, EventArgs e)
+        {
+            using (NpgsqlConnection connection = DatabaseManager.Instance.GetConnection())
+            {
+                connection.Open();
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.Text;
+
+                    string contractNumber = GenerateContractNumber();
+
+                    command.CommandText = "INSERT INTO contracts(contract_number, date_of_entry, created_at, updated_at, room_id, student_id) " +
+                                          "VALUES(@contract_number, NOW(), NOW(), NOW(), @room_id, @student_id)";
+
+                    command.Parameters.AddWithValue("@contract_number", contractNumber);
+                    command.Parameters.AddWithValue("@room_id", idOfRoom);
+                    command.Parameters.AddWithValue("@student_id", selectedStudentId);
+
+                    int rowsAffected = command.ExecuteNonQuery();
+                    //Console.WriteLine("Rows affected: " + rowsAffected);
+                    MessageBox.Show("Rows affected: " + rowsAffected.ToString());
+                }
+            }
+
+            this.Close();
+            Main main = new Main();
+            main.Show();
         }
     }
 }

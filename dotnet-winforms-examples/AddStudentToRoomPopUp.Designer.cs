@@ -30,6 +30,7 @@
         {
             button1 = new System.Windows.Forms.Button();
             comboBoxStudents = new System.Windows.Forms.ComboBox();
+            addStudentToRoomButton = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
             // button1
@@ -46,18 +47,28 @@
             // comboBoxStudents
             // 
             comboBoxStudents.FormattingEnabled = true;
-            comboBoxStudents.Location = new System.Drawing.Point(43, 62);
+            comboBoxStudents.Location = new System.Drawing.Point(57, 66);
             comboBoxStudents.Name = "comboBoxStudents";
             comboBoxStudents.Size = new System.Drawing.Size(242, 40);
             comboBoxStudents.TabIndex = 1;
-            comboBoxStudents.SelectedIndexChanged += new System.EventHandler(comboBoxStudents_SelectedIndexChanged);
-
+            comboBoxStudents.SelectedIndexChanged += comboBoxStudents_SelectedIndexChanged;
+            // 
+            // addStudentToRoomButton
+            // 
+            addStudentToRoomButton.Location = new System.Drawing.Point(57, 328);
+            addStudentToRoomButton.Name = "addStudentToRoomButton";
+            addStudentToRoomButton.Size = new System.Drawing.Size(446, 79);
+            addStudentToRoomButton.TabIndex = 2;
+            addStudentToRoomButton.Text = "Додати студента до кімнати";
+            addStudentToRoomButton.UseVisualStyleBackColor = true;
+            addStudentToRoomButton.Click += addStudentToRoomButton_Click;
             // 
             // AddStudentToRoomPopUp
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(800, 450);
+            Controls.Add(addStudentToRoomButton);
             Controls.Add(comboBoxStudents);
             Controls.Add(button1);
             Name = "AddStudentToRoomPopUp";
@@ -69,5 +80,6 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ComboBox comboBoxStudents;
+        private System.Windows.Forms.Button addStudentToRoomButton;
     }
 }

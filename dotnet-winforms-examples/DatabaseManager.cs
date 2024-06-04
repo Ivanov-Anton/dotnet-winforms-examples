@@ -10,32 +10,30 @@ using Npgsql;
 
 namespace dotnet_winforms_examples
 {
-    internal class DatabaseManager
+    public class DatabaseManager
     {
-        private static readonly Lazy<DatabaseManager> instance = new Lazy<DatabaseManager>(() => new DatabaseManager());
+        private static DatabaseManager instance;
 
-        private NpgsqlConnection? connection;
+        private DatabaseManager() { }
 
-        string connectionString;
-
-        private DatabaseManager()
+        public static DatabaseManager Instance
         {
-            connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            // Initialize database connection
-
-            connection = new NpgsqlConnection(connectionString);
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new DatabaseManager();
+                }
+                return instance;
+            }
         }
-
-        public static DatabaseManager Instance => instance.Value;
 
         public NpgsqlConnection GetConnection()
         {
-            return connection;
-        }
-
-        public NpgsqlConnection GetUniiqueConnection()
-        {
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             return new NpgsqlConnection(connectionString);
         }
     }
+
+
 }
