@@ -128,16 +128,16 @@
             groupBoxOfRooms.Controls.Add(dataGridViewRooms);
             groupBoxOfRooms.Location = new System.Drawing.Point(24, 22);
             groupBoxOfRooms.Name = "groupBoxOfRooms";
-            groupBoxOfRooms.Size = new System.Drawing.Size(1750, 1026);
+            groupBoxOfRooms.Size = new System.Drawing.Size(1812, 1026);
             groupBoxOfRooms.TabIndex = 0;
             groupBoxOfRooms.TabStop = false;
             groupBoxOfRooms.Text = "Інформація кімнат гуртожитку";
             // 
             // addNewRoomButton
             // 
-            addNewRoomButton.Location = new System.Drawing.Point(1403, 48);
+            addNewRoomButton.Location = new System.Drawing.Point(1591, 48);
             addNewRoomButton.Name = "addNewRoomButton";
-            addNewRoomButton.Size = new System.Drawing.Size(242, 46);
+            addNewRoomButton.Size = new System.Drawing.Size(196, 46);
             addNewRoomButton.TabIndex = 2;
             addNewRoomButton.Text = "Додати кімнату";
             addNewRoomButton.UseVisualStyleBackColor = true;
@@ -150,7 +150,7 @@
             dataGridViewRooms.Name = "dataGridViewRooms";
             dataGridViewRooms.RowHeadersWidth = 82;
             dataGridViewRooms.RowTemplate.Height = 41;
-            dataGridViewRooms.Size = new System.Drawing.Size(1346, 895);
+            dataGridViewRooms.Size = new System.Drawing.Size(1548, 895);
             dataGridViewRooms.TabIndex = 1;
             // 
             // tabPage3

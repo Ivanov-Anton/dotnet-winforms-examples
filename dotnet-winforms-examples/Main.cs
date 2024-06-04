@@ -80,7 +80,7 @@ namespace dotnet_winforms_examples
             dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Холодильник", DataPropertyName = "has_fridge", Width = 120 });
             dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Мікрохвилоьва пічь", DataPropertyName = "has_microwave", Width = 120 });
             dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Ціна", DataPropertyName = "price", Width = 120 });
-            // Add action button column
+            // Add action delete button column
             var actionButtonColumn = new DataGridViewButtonColumn
             {
                 HeaderText = "Управління",
@@ -88,8 +88,16 @@ namespace dotnet_winforms_examples
                 UseColumnTextForButtonValue = true
             };
             dataGridViewRooms.Columns.Add(actionButtonColumn);
-
             dataGridViewRooms.CellClick += dataGridViewRooms_CellClick;
+
+            var addStudentColumnAction = new DataGridViewButtonColumn
+            {
+                HeaderText = "Управління",
+                Text = "Додати студента",
+                UseColumnTextForButtonValue = true
+            };
+            dataGridViewRooms.Columns.Add(addStudentColumnAction);
+            dataGridViewRooms.CellClick += dataGridViewRooms_CellClickToAddStudent;
 
 
             // payments
@@ -112,7 +120,7 @@ namespace dotnet_winforms_examples
             dataGridViewPaidPayments.Columns.Add(actionMarkAsPaidButton);
             dataGridViewPaidPayments.CellClick += dataGridViewPaidPayments_CellClick;
 
-            command.Dispose();
+            //command.Dispose();
             connection.Close();
         }
 
@@ -126,10 +134,22 @@ namespace dotnet_winforms_examples
 
         }
 
+        private void dataGridViewRooms_CellClickToAddStudent(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 11)
+            {
+                string id = dataGridViewRooms.Rows[e.RowIndex].Cells[0].Value.ToString();
+                AddStudentToRoomPopUp form = new AddStudentToRoomPopUp(int.Parse(id));
+                this.Hide();
+                form.Show();
+            }
+
+        }
+
         private void DeleteRowFromDatabase(string id)
         {
             string query = "DELETE FROM rooms WHERE id = @Id"; // Adjust the table name and column name accordingly
-            NpgsqlConnection connToDelete = DatabaseManager.Instance.GetUniiqueConnection();
+            NpgsqlConnection connToDelete = DatabaseManager.Instance.GetConnection();
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
             using (NpgsqlCommand command = new NpgsqlCommand(query, connToDelete))
             {
@@ -152,7 +172,7 @@ namespace dotnet_winforms_examples
 
         private void LoadRoomsData()
         {
-            NpgsqlConnection connectionRoom = DatabaseManager.Instance.GetUniiqueConnection();
+            NpgsqlConnection connectionRoom = DatabaseManager.Instance.GetConnection();
             NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("SELECT id, floor, number, available_places, places, comfort, has_balcony, has_fridge, has_microwave, price FROM rooms;", connectionRoom);
             DataTable dataTable = new DataTable();
             dataAdapter.Fill(dataTable);
@@ -167,7 +187,7 @@ namespace dotnet_winforms_examples
             {
                 var id = dataGridViewPaidPayments.Rows[e.RowIndex].Cells[0].Value.ToString();
                 string query = "UPDATE payments SET status = 'Paid' WHERE id = @Id";
-                NpgsqlConnection connToUpdatePayment = DatabaseManager.Instance.GetUniiqueConnection();
+                NpgsqlConnection connToUpdatePayment = DatabaseManager.Instance.GetConnection();
 
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connToUpdatePayment))
                 {
@@ -186,7 +206,7 @@ namespace dotnet_winforms_examples
 
         private void LoadPaidPaymentsData()
         {
-            NpgsqlConnection connectionPaidPayments = DatabaseManager.Instance.GetUniiqueConnection();
+            NpgsqlConnection connectionPaidPayments = DatabaseManager.Instance.GetConnection();
             string sql = "SELECT payments.id, " +
                          "TO_CHAR(month, 'mm-yyyy') AS month, " +
                          "status, " +
