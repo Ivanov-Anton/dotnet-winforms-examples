@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             tabControlRooms = new System.Windows.Forms.TabControl();
             tabPage1 = new System.Windows.Forms.TabPage();
+            flashMessageLabel = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             addStudentButton = new System.Windows.Forms.Button();
             listView1 = new System.Windows.Forms.ListView();
@@ -41,6 +43,7 @@
             groupBox2 = new System.Windows.Forms.GroupBox();
             updateButton = new System.Windows.Forms.Button();
             dataGridViewPaidPayments = new System.Windows.Forms.DataGridView();
+            toolTipForFleshMessage = new System.Windows.Forms.ToolTip(components);
             tabControlRooms.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -73,6 +76,7 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(flashMessageLabel);
             tabPage1.Controls.Add(groupBox1);
             tabPage1.Location = new System.Drawing.Point(74, 4);
             tabPage1.Name = "tabPage1";
@@ -82,13 +86,23 @@
             tabPage1.Text = "Студенти";
             tabPage1.UseVisualStyleBackColor = true;
             // 
+            // flashMessageLabel
+            // 
+            flashMessageLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            flashMessageLabel.ForeColor = System.Drawing.Color.DarkGreen;
+            flashMessageLabel.Location = new System.Drawing.Point(28, 19);
+            flashMessageLabel.Name = "flashMessageLabel";
+            flashMessageLabel.Size = new System.Drawing.Size(1771, 41);
+            flashMessageLabel.TabIndex = 2;
+            flashMessageLabel.Click += flashMessageLabel_Click;
+            // 
             // groupBox1
             // 
             groupBox1.Controls.Add(addStudentButton);
             groupBox1.Controls.Add(listView1);
-            groupBox1.Location = new System.Drawing.Point(28, 19);
+            groupBox1.Location = new System.Drawing.Point(28, 57);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(1771, 1021);
+            groupBox1.Size = new System.Drawing.Size(1771, 943);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Список студентів";
@@ -107,7 +121,7 @@
             // 
             listView1.Location = new System.Drawing.Point(30, 47);
             listView1.Name = "listView1";
-            listView1.Size = new System.Drawing.Size(1152, 940);
+            listView1.Size = new System.Drawing.Size(1152, 862);
             listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
             // 
@@ -126,7 +140,7 @@
             // 
             groupBoxOfRooms.Controls.Add(addNewRoomButton);
             groupBoxOfRooms.Controls.Add(dataGridViewRooms);
-            groupBoxOfRooms.Location = new System.Drawing.Point(24, 22);
+            groupBoxOfRooms.Location = new System.Drawing.Point(24, 92);
             groupBoxOfRooms.Name = "groupBoxOfRooms";
             groupBoxOfRooms.Size = new System.Drawing.Size(1812, 1026);
             groupBoxOfRooms.TabIndex = 0;
@@ -168,7 +182,7 @@
             // 
             groupBox2.Controls.Add(updateButton);
             groupBox2.Controls.Add(dataGridViewPaidPayments);
-            groupBox2.Location = new System.Drawing.Point(20, 25);
+            groupBox2.Location = new System.Drawing.Point(20, 85);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new System.Drawing.Size(1792, 1035);
             groupBox2.TabIndex = 0;
@@ -233,5 +247,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView dataGridViewPaidPayments;
         private System.Windows.Forms.Button updateButton;
+        private System.Windows.Forms.Label flashMessageLabel;
+        private System.Windows.Forms.ToolTip toolTipForFleshMessage;
     }
 }

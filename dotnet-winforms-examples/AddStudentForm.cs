@@ -55,7 +55,7 @@ namespace dotnet_winforms_examples
             Console.WriteLine("Rows affected: " + rowsAffected);
             connection.Close();
             this.Close();
-            Main main = new Main();
+            Main main = new Main("Новий студент гуртожитку успішно стровено");
             main.Show();
         }
 

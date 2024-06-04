@@ -65,7 +65,7 @@ namespace dotnet_winforms_examples
             command.ExecuteNonQuery();
             connection.Close();
             this.Close();
-            Main main = new Main();
+            Main main = new Main("Ваша кімната успішно збережена");
             main.Show();
         }
 
