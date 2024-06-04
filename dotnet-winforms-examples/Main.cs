@@ -80,7 +80,7 @@ namespace dotnet_winforms_examples
             dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Холодильник", DataPropertyName = "has_fridge", Width = 120 });
             dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Мікрохвилоьва пічь", DataPropertyName = "has_microwave", Width = 120 });
             dataGridViewRooms.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Ціна", DataPropertyName = "price", Width = 120 });
-            // Add action button column
+            // Add action delete button column
             var actionButtonColumn = new DataGridViewButtonColumn
             {
                 HeaderText = "Управління",
@@ -88,8 +88,16 @@ namespace dotnet_winforms_examples
                 UseColumnTextForButtonValue = true
             };
             dataGridViewRooms.Columns.Add(actionButtonColumn);
-
             dataGridViewRooms.CellClick += dataGridViewRooms_CellClick;
+
+            var addStudentColumnAction = new DataGridViewButtonColumn
+            {
+                HeaderText = "Управління",
+                Text = "Додати студента",
+                UseColumnTextForButtonValue = true
+            };
+            dataGridViewRooms.Columns.Add(addStudentColumnAction);
+            dataGridViewRooms.CellClick += dataGridViewRooms_CellClickToAddStudent;
 
 
             // payments
@@ -112,7 +120,7 @@ namespace dotnet_winforms_examples
             dataGridViewPaidPayments.Columns.Add(actionMarkAsPaidButton);
             dataGridViewPaidPayments.CellClick += dataGridViewPaidPayments_CellClick;
 
-            command.Dispose();
+            //command.Dispose();
             connection.Close();
         }
 
@@ -122,6 +130,18 @@ namespace dotnet_winforms_examples
             {
                 var id = dataGridViewRooms.Rows[e.RowIndex].Cells[0].Value.ToString();
                 DeleteRowFromDatabase(id);
+            }
+
+        }
+
+        private void dataGridViewRooms_CellClickToAddStudent(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 11)
+            {
+                string id = dataGridViewRooms.Rows[e.RowIndex].Cells[0].Value.ToString();
+                AddStudentToRoomPopUp form = new AddStudentToRoomPopUp(int.Parse(id));
+                this.Hide();
+                form.Show();
             }
 
         }
