@@ -21,7 +21,6 @@ namespace dotnet_winforms_examples
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.idOfRoom = idOfRoom;
-
             LoadStudents();
         }
 
@@ -100,6 +99,7 @@ namespace dotnet_winforms_examples
 
         private void addStudentToRoomButton_Click(object sender, EventArgs e)
         {
+            string contractNumber = GenerateContractNumber();
             using (NpgsqlConnection connection = DatabaseManager.Instance.GetConnection())
             {
                 connection.Open();
@@ -108,8 +108,6 @@ namespace dotnet_winforms_examples
                     command.Connection = connection;
                     command.CommandType = CommandType.Text;
 
-                    string contractNumber = GenerateContractNumber();
-
                     command.CommandText = "INSERT INTO contracts(contract_number, date_of_entry, created_at, updated_at, room_id, student_id) " +
                                           "VALUES(@contract_number, NOW(), NOW(), NOW(), @room_id, @student_id)";
 
@@ -117,14 +115,15 @@ namespace dotnet_winforms_examples
                     command.Parameters.AddWithValue("@room_id", idOfRoom);
                     command.Parameters.AddWithValue("@student_id", selectedStudentId);
 
-                    int rowsAffected = command.ExecuteNonQuery();
-                    //Console.WriteLine("Rows affected: " + rowsAffected);
-                    MessageBox.Show("Rows affected: " + rowsAffected.ToString());
+                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                    command.CommandText = "UPDATE rooms SET available_places = available_places - 1 WHERE id = @id";
+                    command.Parameters.AddWithValue("@id", idOfRoom);
                 }
             }
 
             this.Close();
-            Main main = new Main();
+            Main main = new Main("Студент успішно заерестрований в гуртожитку, номер контракту: " + contractNumber);
             main.Show();
         }
     }
