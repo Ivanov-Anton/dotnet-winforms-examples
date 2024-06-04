@@ -18,13 +18,28 @@ namespace dotnet_winforms_examples
     {
         private NpgsqlConnection? connection;
 
-        public Main(string flashMessage = "")
+        public Main(string flashMessage = "", System.Drawing.Color? color = null)
         {
             InitializeComponent();
             if (flashMessage.Length > 0)
             {
+                if (color != null)
+                {
+                    flashMessageLabel.ForeColor = color.Value;
+                    flashMessageLabelRooms.ForeColor = color.Value;
+                    flashMessagePaymentsLabel.ForeColor = color.Value;
+                }
+                if (color == null)
+                {
+                    flashMessageLabel.ForeColor = System.Drawing.Color.Green;
+                    flashMessageLabelRooms.ForeColor = System.Drawing.Color.Green;
+                    flashMessagePaymentsLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                
                 flashMessageLabel.Text = flashMessage;
+                
                 flashMessageLabelRooms.Text = flashMessage;
+                
                 flashMessagePaymentsLabel.Text = flashMessage;
                 // Set up the delays for the ToolTip.
                 toolTipForFleshMessage.AutoPopDelay = 0;
@@ -41,13 +56,13 @@ namespace dotnet_winforms_examples
 
         private void flashMessagelabelMouseEnterEvent(object sender, EventArgs e)
         {
-            ((Label)sender).ForeColor = System.Drawing.Color.DarkGreen;
+            //((Label)sender).ForeColor = System.Drawing.Color.DarkGreen;
             ((Label)sender).Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
         }
 
         private void flashMessagelabelMouseLeaveEvent(object sender, EventArgs e)
         {
-            ((Label)sender).ForeColor = System.Drawing.Color.Green;
+            //((Label)sender).ForeColor = System.Drawing.Color.Green;
             ((Label)sender).Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
         }
 
@@ -88,7 +103,7 @@ namespace dotnet_winforms_examples
             };
             dataGridViewRooms.Columns.Add(addStudentColumnAction);
             dataGridViewRooms.CellClick += dataGridViewRooms_CellClickToAddStudent;
-
+            dataGridViewRooms.Columns[0].Visible = false;
 
             // payments
 
@@ -109,54 +124,101 @@ namespace dotnet_winforms_examples
             };
             dataGridViewPaidPayments.Columns.Add(actionMarkAsPaidButton);
             dataGridViewPaidPayments.CellClick += dataGridViewPaidPayments_CellClick;
-
-            //command.Dispose();
-            connection.Close();
+            dataGridViewPaidPayments.Columns[0].Visible = false;
         }
 
-        private void LoadStudents() 
+        private void LoadStudents()
         {
-            connection = DatabaseManager.Instance.GetConnection();
-            connection.Open();
-            NpgsqlCommand command = new NpgsqlCommand();
-            command.Connection = connection;
-            command.CommandType = CommandType.Text;
-            command.CommandText = "SELECT first_name, last_name, phone_number, COALESCE(contracts.contract_number, 'без договору'), COALESCE(faculty, '') FROM students " +
-                                  "LEFT JOIN contracts ON contracts.student_id = students.id;";
-            NpgsqlDataReader reader = command.ExecuteReader();
+            NpgsqlConnection connection = DatabaseManager.Instance.GetConnection();
+            NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(
+                "SELECT students.id as id, first_name, last_name, phone_number, COALESCE(contracts.contract_number, 'без договору') AS contract_number, COALESCE(faculty, '') AS faculty " +
+                "FROM students " +
+                "LEFT JOIN contracts ON contracts.student_id = students.id;", connection);
+            DataTable dataTable = new DataTable();
+            dataAdapter.Fill(dataTable);
 
-            listView1.View = View.Details;
-            listView1.MultiSelect = true;
-            ColumnHeader columnHeaderFirstName = new ColumnHeader();
-            columnHeaderFirstName.Text = "Імʼя";
-            columnHeaderFirstName.Width = 160;
+            // Set up the DataGridView
+            dataGridViewStudents.AutoGenerateColumns = false;
+            dataGridViewStudents.DataSource = dataTable;
+            dataGridViewStudents.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            listView1.Columns.Add(columnHeaderFirstName);
-            ColumnHeader columnHeaderLastName = new ColumnHeader();
-            columnHeaderLastName.Text = "Прізвище";
-            columnHeaderLastName.Width = 200;
-            listView1.Columns.Add(columnHeaderLastName);
+            // Add columns
+            dataGridViewStudents.Columns.Clear();
 
-            ColumnHeader columnHeaderPhoneNumber = new ColumnHeader();
-            columnHeaderPhoneNumber.Text = "Номер телефона";
-            columnHeaderPhoneNumber.Width = 230;
-            listView1.Columns.Add(columnHeaderPhoneNumber);
-
-            ColumnHeader columnHeaderContractNumber = new ColumnHeader();
-            columnHeaderContractNumber.Text = "Номер договора";
-            columnHeaderContractNumber.Width = 230;
-            listView1.Columns.Add(columnHeaderContractNumber);
-
-            ColumnHeader columnHeaderFaculty = new ColumnHeader();
-            columnHeaderFaculty.Text = "Факультет";
-            columnHeaderFaculty.Width = 250;
-            listView1.Columns.Add(columnHeaderFaculty);
-
-            while (reader.Read())
+            dataGridViewStudents.Columns.Add(new DataGridViewTextBoxColumn
             {
-                listView1.Items.Add(new ListViewItem(new[] { reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4) }));
+                HeaderText = "id",
+                DataPropertyName = "id",
+                Width = 79
+            });
+
+            dataGridViewStudents.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Імʼя",
+                DataPropertyName = "first_name",
+                Width = 160
+            });
+
+            dataGridViewStudents.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Прізвище",
+                DataPropertyName = "last_name",
+                Width = 200
+            });
+
+            dataGridViewStudents.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Номер телефона",
+                DataPropertyName = "phone_number",
+                Width = 230
+            });
+
+            dataGridViewStudents.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Номер договора",
+                DataPropertyName = "contract_number",
+                Width = 230
+            });
+
+            dataGridViewStudents.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Факультет",
+                DataPropertyName = "faculty",
+                Width = 250
+            });
+
+            var actionRemoveStudentButtonColumn = new DataGridViewButtonColumn
+            {
+                HeaderText = "Управління",
+                Text = "Видалити",
+                UseColumnTextForButtonValue = true
+            };
+            dataGridViewStudents.Columns.Add(actionRemoveStudentButtonColumn);
+            dataGridViewStudents.CellClick += dataGridViewStudent_RemoveCellClick;
+
+            dataGridViewStudents.Columns[0].Visible = false;
+        }
+
+        private void dataGridViewStudent_RemoveCellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 6)
+            {
+                string id = dataGridViewStudents.Rows[e.RowIndex].Cells[0].Value.ToString();
+                string query = "DELETE FROM students WHERE id = @Id";
+                NpgsqlConnection connToDelete = DatabaseManager.Instance.GetConnection();
+                using (NpgsqlCommand command = new NpgsqlCommand(query, connToDelete))
+                {
+                    command.Parameters.AddWithValue("@Id", int.Parse(id));
+                    connToDelete.Open();
+                    command.ExecuteNonQuery();
+                    connToDelete.Close();
+                }
+                dataGridViewStudents.DataSource = null;
+                SetGreenFlashMessage("Студент успішно видалений");
+                LoadStudents();
             }
         }
+
 
         private void dataGridViewRooms_RemoveCellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -175,7 +237,8 @@ namespace dotnet_winforms_examples
             {
                 string id = dataGridViewRooms.Rows[e.RowIndex].Cells[0].Value.ToString();
                 string price = dataGridViewRooms.Rows[e.RowIndex].Cells[9].Value.ToString();
-                AddStudentToRoomPopUp form = new AddStudentToRoomPopUp(int.Parse(id), price);
+                string amountOfAvailablePlaces = dataGridViewRooms.Rows[e.RowIndex].Cells[3].Value.ToString();
+                AddStudentToRoomPopUp form = new AddStudentToRoomPopUp(int.Parse(id), price, int.Parse(amountOfAvailablePlaces));
                 this.Hide();
                 form.Show();
             }
@@ -234,7 +297,6 @@ namespace dotnet_winforms_examples
                 }
 
                 flashMessageLabel.Text = "Статус успішно змінено";
-                // Refresh the DataGridView to reflect the changes
                 dataGridViewPaidPayments.DataSource = null;
                 LoadPaidPaymentsData();
 
@@ -337,6 +399,13 @@ namespace dotnet_winforms_examples
             flashMessageLabelRooms.Text = "";
             flashMessagePaymentsLabel.Text = "";
             flashMessageLabel.Text = "";
+        }
+
+        private void SetGreenFlashMessage(string message)
+        {
+            flashMessagePaymentsLabel.Text = message;
+            flashMessageLabel.Text = message;
+            flashMessageLabelRooms.Text = message;
         }
 
         private void flashMessagePaymentsLabel_Click(object sender, EventArgs e)
