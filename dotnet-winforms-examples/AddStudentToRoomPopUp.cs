@@ -15,13 +15,15 @@ namespace dotnet_winforms_examples
     {
         private int idOfRoom;
         private int selectedStudentId;
-        public AddStudentToRoomPopUp(int idOfRoom)
+        private string priceOfSelectedRoom;
+        public AddStudentToRoomPopUp(int idOfRoom, string priceOfSelectedRoom)
         {
             InitializeComponent();
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.idOfRoom = idOfRoom;
             LoadStudents();
+            this.priceOfSelectedRoom = priceOfSelectedRoom;
         }
 
         protected override CreateParams CreateParams
@@ -109,22 +111,45 @@ namespace dotnet_winforms_examples
                     command.CommandType = CommandType.Text;
 
                     command.CommandText = "INSERT INTO contracts(contract_number, date_of_entry, created_at, updated_at, room_id, student_id) " +
-                                          "VALUES(@contract_number, NOW(), NOW(), NOW(), @room_id, @student_id)";
+                                          "VALUES(@contract_number, NOW(), NOW(), NOW(), @room_id, @student_id) RETURNING id";
 
                     command.Parameters.AddWithValue("@contract_number", contractNumber);
                     command.Parameters.AddWithValue("@room_id", idOfRoom);
                     command.Parameters.AddWithValue("@student_id", selectedStudentId);
 
-                    command.ExecuteNonQuery();
+                    //command.ExecuteNonQuery();
+                    NpgsqlDataReader reader = command.ExecuteReader();
+                    reader.Read();
+
+                    int contract_id = reader.GetInt32(0);
+                    MessageBox.Show(contract_id.ToString());
+                    reader.Close();
+
                     command.Parameters.Clear();
                     command.CommandText = "UPDATE rooms SET available_places = available_places - 1 WHERE id = @id";
                     command.Parameters.AddWithValue("@id", idOfRoom);
-                }
-            }
+                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                    command.CommandText = "INSERT INTO payments(date, month, monthly_amount, status, created_at, updated_at, contract_id) " +
+                                          "VALUES(NOW(), NOW(), @priceOfSelectedRoom, 'Pending', NOW(), NOW(), @contract_id);";
+                    command.Parameters.AddWithValue("@priceOfSelectedRoom", int.Parse(priceOfSelectedRoom));
+                    command.Parameters.AddWithValue("@contract_id", contract_id);
+                    command.ExecuteNonQuery();
+                    //reader = command.ExecuteReader();
+                    //while (reader.HasRows)
+                    //{
+                    //    while (reader.Read())
+                    //    {
+                    //        MessageBox.Show("RETURNING: " + contract_id.ToString() + " SELECT id: " + reader.GetInt32(0).ToString());
+                    //    }
+                    //}
 
-            this.Close();
-            Main main = new Main("Студент успішно заерестрований в гуртожитку, номер контракту: " + contractNumber);
-            main.Show();
+                }
+
+                this.Close();
+                Main main = new Main("Студент успішно заерестрований в гуртожитку, номер контракту: " + contractNumber);
+                main.Show();
+            }
         }
     }
 }

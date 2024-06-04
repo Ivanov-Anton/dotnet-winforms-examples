@@ -59,8 +59,8 @@ namespace dotnet_winforms_examples
             command.Parameters.AddWithValue("@numberOfRoom", numberOfRoom);
             command.Parameters.AddWithValue("@price", price);
 
-            command.CommandText = "INSERT INTO rooms(places, comfort, floor, has_balcony, has_fridge, has_microwave, number, price) " +
-                                  "VALUES (@capacityPlaces, @lavelComfort, @floorNumber, @hasBalcony, @hasFridge, @hasMicrowave, @numberOfRoom, @price)";
+            command.CommandText = "INSERT INTO rooms(places, comfort, floor, has_balcony, has_fridge, has_microwave, number, price, available_places) " +
+                                  "VALUES (@capacityPlaces, @lavelComfort, @floorNumber, @hasBalcony, @hasFridge, @hasMicrowave, @numberOfRoom, @price, @capacityPlaces)";
 
             command.ExecuteNonQuery();
             connection.Close();
