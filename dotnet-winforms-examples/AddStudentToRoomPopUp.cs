@@ -16,7 +16,8 @@ namespace dotnet_winforms_examples
         private int idOfRoom;
         private int selectedStudentId;
         private string priceOfSelectedRoom;
-        public AddStudentToRoomPopUp(int idOfRoom, string priceOfSelectedRoom)
+        private int amountOfAvailablePlaces;
+        public AddStudentToRoomPopUp(int idOfRoom, string priceOfSelectedRoom, int amountOfAvailablePlaces)
         {
             InitializeComponent();
             this.MaximizeBox = false;
@@ -24,6 +25,7 @@ namespace dotnet_winforms_examples
             this.idOfRoom = idOfRoom;
             LoadStudents();
             this.priceOfSelectedRoom = priceOfSelectedRoom;
+            this.amountOfAvailablePlaces = amountOfAvailablePlaces;
         }
 
         protected override CreateParams CreateParams
@@ -102,52 +104,51 @@ namespace dotnet_winforms_examples
         private void addStudentToRoomButton_Click(object sender, EventArgs e)
         {
             string contractNumber = GenerateContractNumber();
-            using (NpgsqlConnection connection = DatabaseManager.Instance.GetConnection())
+            
+            if (amountOfAvailablePlaces > 0)
             {
-                connection.Open();
-                using (NpgsqlCommand command = new NpgsqlCommand())
+                using (NpgsqlConnection connection = DatabaseManager.Instance.GetConnection())
                 {
-                    command.Connection = connection;
-                    command.CommandType = CommandType.Text;
+                    connection.Open();
+                    using (NpgsqlCommand command = new NpgsqlCommand())
+                    {
+                        command.Connection = connection;
+                        command.CommandType = CommandType.Text;
 
-                    command.CommandText = "INSERT INTO contracts(contract_number, date_of_entry, created_at, updated_at, room_id, student_id) " +
-                                          "VALUES(@contract_number, NOW(), NOW(), NOW(), @room_id, @student_id) RETURNING id";
+                        command.CommandText = "INSERT INTO contracts(contract_number, date_of_entry, created_at, updated_at, room_id, student_id) " +
+                                              "VALUES(@contract_number, NOW(), NOW(), NOW(), @room_id, @student_id) RETURNING id";
 
-                    command.Parameters.AddWithValue("@contract_number", contractNumber);
-                    command.Parameters.AddWithValue("@room_id", idOfRoom);
-                    command.Parameters.AddWithValue("@student_id", selectedStudentId);
+                        command.Parameters.AddWithValue("@contract_number", contractNumber);
+                        command.Parameters.AddWithValue("@room_id", idOfRoom);
+                        command.Parameters.AddWithValue("@student_id", selectedStudentId);
 
-                    //command.ExecuteNonQuery();
-                    NpgsqlDataReader reader = command.ExecuteReader();
-                    reader.Read();
+                        NpgsqlDataReader reader = command.ExecuteReader();
+                        reader.Read();
 
-                    int contract_id = reader.GetInt32(0);
-                    MessageBox.Show(contract_id.ToString());
-                    reader.Close();
+                        int contract_id = reader.GetInt32(0);
+                        reader.Close();
 
-                    command.Parameters.Clear();
-                    command.CommandText = "UPDATE rooms SET available_places = available_places - 1 WHERE id = @id";
-                    command.Parameters.AddWithValue("@id", idOfRoom);
-                    command.ExecuteNonQuery();
-                    command.Parameters.Clear();
-                    command.CommandText = "INSERT INTO payments(date, month, monthly_amount, status, created_at, updated_at, contract_id) " +
-                                          "VALUES(NOW(), NOW(), @priceOfSelectedRoom, 'Pending', NOW(), NOW(), @contract_id);";
-                    command.Parameters.AddWithValue("@priceOfSelectedRoom", int.Parse(priceOfSelectedRoom));
-                    command.Parameters.AddWithValue("@contract_id", contract_id);
-                    command.ExecuteNonQuery();
-                    //reader = command.ExecuteReader();
-                    //while (reader.HasRows)
-                    //{
-                    //    while (reader.Read())
-                    //    {
-                    //        MessageBox.Show("RETURNING: " + contract_id.ToString() + " SELECT id: " + reader.GetInt32(0).ToString());
-                    //    }
-                    //}
+                        command.Parameters.Clear();
+                        command.CommandText = "UPDATE rooms SET available_places = available_places - 1 WHERE id = @id";
+                        command.Parameters.AddWithValue("@id", idOfRoom);
+                        command.ExecuteNonQuery();
+                        command.Parameters.Clear();
+                        command.CommandText = "INSERT INTO payments(date, month, monthly_amount, status, created_at, updated_at, contract_id) " +
+                                              "VALUES(NOW(), NOW(), @priceOfSelectedRoom, 'Pending', NOW(), NOW(), @contract_id);";
+                        command.Parameters.AddWithValue("@priceOfSelectedRoom", int.Parse(priceOfSelectedRoom));
+                        command.Parameters.AddWithValue("@contract_id", contract_id);
+                        command.ExecuteNonQuery();
+                    }
 
+                    this.Close();
+                    Main mainForm = new Main("Студент успішно заерестрований в гуртожитку, номер контракту: " + contractNumber);
+                    mainForm.Show();
                 }
-
+            } else
+            {
+                // There is no any available places in current Room, therefore render error flash message
                 this.Close();
-                Main main = new Main("Студент успішно заерестрований в гуртожитку, номер контракту: " + contractNumber);
+                Main main = new Main("Нажаль для вибраної вами кімнати не залишилося жодного місця", System.Drawing.Color.Red);
                 main.Show();
             }
         }

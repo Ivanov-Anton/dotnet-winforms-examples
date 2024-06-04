@@ -33,14 +33,15 @@
             tabPage1 = new System.Windows.Forms.TabPage();
             flashMessageLabel = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
+            dataGridViewStudents = new System.Windows.Forms.DataGridView();
             updateButton2 = new System.Windows.Forms.Button();
             addStudentButton = new System.Windows.Forms.Button();
-            listView1 = new System.Windows.Forms.ListView();
             exitBtn = new System.Windows.Forms.Button();
             tabPage2 = new System.Windows.Forms.TabPage();
             flashMessageLabelRooms = new System.Windows.Forms.Label();
             exitBtn2 = new System.Windows.Forms.Button();
             groupBoxOfRooms = new System.Windows.Forms.GroupBox();
+            updateButton3 = new System.Windows.Forms.Button();
             addNewRoomButton = new System.Windows.Forms.Button();
             dataGridViewRooms = new System.Windows.Forms.DataGridView();
             tabPage3 = new System.Windows.Forms.TabPage();
@@ -50,10 +51,10 @@
             updateButton = new System.Windows.Forms.Button();
             dataGridViewPaidPayments = new System.Windows.Forms.DataGridView();
             toolTipForFleshMessage = new System.Windows.Forms.ToolTip(components);
-            updateButton3 = new System.Windows.Forms.Button();
             tabControlRooms.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewStudents).BeginInit();
             tabPage2.SuspendLayout();
             groupBoxOfRooms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewRooms).BeginInit();
@@ -106,9 +107,9 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(dataGridViewStudents);
             groupBox1.Controls.Add(updateButton2);
             groupBox1.Controls.Add(addStudentButton);
-            groupBox1.Controls.Add(listView1);
             groupBox1.Location = new System.Drawing.Point(28, 51);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new System.Drawing.Size(1771, 896);
@@ -116,11 +117,33 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Список студентів.";
             // 
+            // dataGridViewStudents
+            // 
+            dataGridViewStudents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewStudents.Location = new System.Drawing.Point(24, 47);
+            dataGridViewStudents.Name = "dataGridViewStudents";
+            dataGridViewStudents.ReadOnly = true;
+            dataGridViewStudents.RowHeadersWidth = 82;
+
+            dataGridViewStudents.RowTemplate.Height = 41;
+            dataGridViewStudents.Size = new System.Drawing.Size(1492, 823);
+            dataGridViewStudents.TabIndex = 3;
+            dataGridViewStudents.AllowUserToAddRows = false;
+            dataGridViewStudents.AllowUserToDeleteRows = false;
+            dataGridViewStudents.AllowUserToOrderColumns = true;
+
+            dataGridViewStudents.MultiSelect = false;
+            dataGridViewStudents.BackgroundColor = System.Drawing.Color.White;
+            dataGridViewStudents.AllowUserToResizeColumns = false;
+            
+            dataGridViewStudents.AllowUserToResizeRows = false;
+            
+            // 
             // updateButton2
             // 
-            updateButton2.Location = new System.Drawing.Point(1212, 115);
+            updateButton2.Location = new System.Drawing.Point(1534, 115);
             updateButton2.Name = "updateButton2";
-            updateButton2.Size = new System.Drawing.Size(400, 46);
+            updateButton2.Size = new System.Drawing.Size(218, 46);
             updateButton2.TabIndex = 2;
             updateButton2.Text = "Оновитии";
             updateButton2.UseVisualStyleBackColor = true;
@@ -128,21 +151,13 @@
             // 
             // addStudentButton
             // 
-            addStudentButton.Location = new System.Drawing.Point(1212, 47);
+            addStudentButton.Location = new System.Drawing.Point(1534, 47);
             addStudentButton.Name = "addStudentButton";
-            addStudentButton.Size = new System.Drawing.Size(400, 46);
+            addStudentButton.Size = new System.Drawing.Size(218, 46);
             addStudentButton.TabIndex = 1;
             addStudentButton.Text = "Додати студента";
             addStudentButton.UseVisualStyleBackColor = true;
             addStudentButton.Click += addStudentButton_Click;
-            // 
-            // listView1
-            // 
-            listView1.Location = new System.Drawing.Point(30, 47);
-            listView1.Name = "listView1";
-            listView1.Size = new System.Drawing.Size(1152, 821);
-            listView1.TabIndex = 0;
-            listView1.UseCompatibleStateImageBehavior = false;
             // 
             // exitBtn
             // 
@@ -202,6 +217,16 @@
             groupBoxOfRooms.TabStop = false;
             groupBoxOfRooms.Text = "Інформація кімнат гуртожитку";
             // 
+            // updateButton3
+            // 
+            updateButton3.Location = new System.Drawing.Point(1591, 112);
+            updateButton3.Name = "updateButton3";
+            updateButton3.Size = new System.Drawing.Size(196, 46);
+            updateButton3.TabIndex = 3;
+            updateButton3.Text = "Оновити";
+            updateButton3.UseVisualStyleBackColor = true;
+            updateButton3.Click += updateButton3_Click;
+            // 
             // addNewRoomButton
             // 
             addNewRoomButton.Location = new System.Drawing.Point(1591, 48);
@@ -221,6 +246,7 @@
             dataGridViewRooms.RowTemplate.Height = 41;
             dataGridViewRooms.Size = new System.Drawing.Size(1548, 822);
             dataGridViewRooms.TabIndex = 1;
+            dataGridViewRooms.BackgroundColor = System.Drawing.Color.White;
             // 
             // tabPage3
             // 
@@ -288,16 +314,7 @@
             dataGridViewPaidPayments.RowTemplate.Height = 41;
             dataGridViewPaidPayments.Size = new System.Drawing.Size(1382, 868);
             dataGridViewPaidPayments.TabIndex = 0;
-            // 
-            // updateButton3
-            // 
-            updateButton3.Location = new System.Drawing.Point(1591, 112);
-            updateButton3.Name = "updateButton3";
-            updateButton3.Size = new System.Drawing.Size(196, 46);
-            updateButton3.TabIndex = 3;
-            updateButton3.Text = "Оновити";
-            updateButton3.UseVisualStyleBackColor = true;
-            updateButton3.Click += updateButton3_Click;
+            dataGridViewPaidPayments.BackgroundColor = System.Drawing.Color.White;
             // 
             // Main
             // 
@@ -312,6 +329,7 @@
             tabControlRooms.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridViewStudents).EndInit();
             tabPage2.ResumeLayout(false);
             groupBoxOfRooms.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridViewRooms).EndInit();
@@ -326,7 +344,6 @@
         public System.Windows.Forms.TabControl tabControlRooms;
         public System.Windows.Forms.TabPage tabPage1;
         public System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button addStudentButton;
         private System.Windows.Forms.GroupBox groupBoxOfRooms;
@@ -345,5 +362,6 @@
         private System.Windows.Forms.Label flashMessagePaymentsLabel;
         private System.Windows.Forms.Button updateButton2;
         private System.Windows.Forms.Button updateButton3;
+        private System.Windows.Forms.DataGridView dataGridViewStudents;
     }
 }
