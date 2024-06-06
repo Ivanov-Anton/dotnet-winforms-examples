@@ -35,11 +35,11 @@ namespace dotnet_winforms_examples
                     flashMessageLabelRooms.ForeColor = System.Drawing.Color.Green;
                     flashMessagePaymentsLabel.ForeColor = System.Drawing.Color.Green;
                 }
-                
+
                 flashMessageLabel.Text = flashMessage;
-                
+
                 flashMessageLabelRooms.Text = flashMessage;
-                
+
                 flashMessagePaymentsLabel.Text = flashMessage;
                 // Set up the delays for the ToolTip.
                 toolTipForFleshMessage.AutoPopDelay = 0;
@@ -421,7 +421,7 @@ namespace dotnet_winforms_examples
             LoadStudents();
         }
 
-    
+
         // update from Rooms page
         private void updateButton3_Click(object sender, EventArgs e)
         {
