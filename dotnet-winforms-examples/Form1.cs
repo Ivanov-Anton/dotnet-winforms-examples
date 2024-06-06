@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Data;
 using System.Windows.Forms;
-using Npgsql;
 
 namespace dotnet_winforms_examples
 {
@@ -10,7 +8,7 @@ namespace dotnet_winforms_examples
         public Form1()
         {
             InitializeComponent();
-            
+
         }
 
         private void NavigationBarExampleButton_Click(object sender, EventArgs e)
